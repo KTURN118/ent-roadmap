@@ -23,6 +23,11 @@ export default async function handler(req, res) {
             name
             type
           }
+          labels {
+            nodes {
+              name
+            }
+          }
         }
       }
     }
@@ -38,7 +43,13 @@ export default async function handler(req, res) {
       body: JSON.stringify({ query })
     });
 
-    const data = await response.json();
+    const text = await response.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch(e) {
+      return res.status(500).json({ error: 'Invalid JSON from Linear', raw: text.slice(0, 300) });
+    }
 
     if (data.errors) {
       return res.status(500).json({ error: data.errors[0].message });
@@ -52,7 +63,10 @@ export default async function handler(req, res) {
     }).filter(p => {
       const type = (p.status?.type || '').toLowerCase();
       return type !== 'canceled' && type !== 'completed';
-    });
+    }).map(p => ({
+      ...p,
+      labels: (p.labels?.nodes || []).map(l => l.name)
+    }));
 
     return res.status(200).json({ projects: pmProjects });
   } catch (err) {
