@@ -9,21 +9,20 @@ export default async function handler(req, res) {
 
   const query = `
     query {
-      projects(
-        filter: { teams: { name: { eq: "Product Management" } } }
-        first: 50
-      ) {
+      projects(first: 50) {
         nodes {
           id
           name
-          description
           url
-          status { name type }
-          priority { name value }
-          labels
-          lead { name }
-          targetDate
-          startDate
+          teams {
+            nodes {
+              name
+            }
+          }
+          status {
+            name
+            type
+          }
         }
       }
     }
@@ -34,7 +33,7 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
+        'Authorization': apiKey
       },
       body: JSON.stringify({ query })
     });
@@ -45,12 +44,17 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: data.errors[0].message });
     }
 
-    const projects = (data.data?.projects?.nodes || []).filter(p => {
+    const allProjects = data.data?.projects?.nodes || [];
+
+    const pmProjects = allProjects.filter(p => {
+      const teams = p.teams?.nodes || [];
+      return teams.some(t => t.name === 'Product Management');
+    }).filter(p => {
       const type = (p.status?.type || '').toLowerCase();
       return type !== 'canceled' && type !== 'completed';
     });
 
-    return res.status(200).json({ projects });
+    return res.status(200).json({ projects: pmProjects });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
