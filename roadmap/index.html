@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entelligence PM Roadmap</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f7f7f5;
+      color: #1a1a1a;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+    }
+
+    .header-left h1 {
+      font-size: 22px;
+      font-weight: 500;
+      color: #1a1a1a;
+    }
+
+    .header-left p {
+      font-size: 13px;
+      color: #888;
+      margin-top: 3px;
+    }
+
+    .refresh-btn {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.15);
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      color: #555;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .refresh-btn:hover { background: #f0f0ee; }
+
+    .lanes {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    @media (max-width: 700px) {
+      .lanes { grid-template-columns: 1fr 1fr; }
+      body { padding: 1rem; }
+    }
+
+    .lane {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .lane-header {
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .d-now     { background: #E24B4A; }
+    .d-next    { background: #EF9F27; }
+    .d-soon    { background: #378ADD; }
+    .d-someday { background: #888780; }
+
+    .lane-title {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .lane-count {
+      margin-left: auto;
+      font-size: 11px;
+      color: #888;
+      background: #f5f5f3;
+      border-radius: 999px;
+      padding: 1px 8px;
+    }
+
+    .lane-body {
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      min-height: 60px;
+    }
+
+    .card {
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 8px;
+      padding: 8px 10px;
+      text-decoration: none;
+      display: block;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .card:hover { background: #f7f7f5; }
+
+    .card-name {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.4;
+      color: #1a1a1a;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 10px;
+      padding: 1px 7px;
+      border-radius: 4px;
+      margin-top: 4px;
+    }
+
+    .b-inprogress  { background: #E6F1FB; color: #0C447C; }
+    .b-planned     { background: #FAEEDA; color: #633806; }
+    .b-backlog     { background: #f0f0ee; color: #666; }
+
+    .empty {
+      font-size: 11px;
+      color: #bbb;
+      text-align: center;
+      padding: 12px 4px;
+    }
+
+    .unassigned {
+      margin-top: 1.5rem;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 12px;
+      padding: 12px 16px;
+    }
+
+    .unassigned-title {
+      font-size: 12px;
+      font-weight: 500;
+      color: #888;
+      margin-bottom: 8px;
+    }
+
+    .unassigned-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .chip {
+      border: 1px dashed rgba(0,0,0,0.2);
+      border-radius: 6px;
+      padding: 3px 10px;
+      font-size: 11px;
+      color: #888;
+      text-decoration: none;
+    }
+
+    .chip:hover { background: #f5f5f3; color: #444; }
+
+    .loading {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: #888;
+      font-size: 14px;
+    }
+
+    .spinner {
+      width: 24px;
+      height: 24px;
+      border: 2px solid #e0e0e0;
+      border-top-color: #888;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .error {
+      background: #fff0f0;
+      border: 1px solid rgba(200,0,0,0.15);
+      border-radius: 8px;
+      padding: 1rem;
+      font-size: 13px;
+      color: #a00;
+      margin: 1rem 0;
+    }
+
+    .footer {
+      margin-top: 1.5rem;
+      font-size: 11px;
+      color: #bbb;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <div class="header-left">
+      <h1>PM Roadmap</h1>
+      <p id="subtitle">Loading projects from Linear…</p>
+    </div>
+    <button class="refresh-btn" onclick="loadRoadmap()">
+      ↻ Refresh
+    </button>
+  </div>
+
+  <div id="root">
+    <div class="loading">
+      <div class="spinner"></div>
+      Fetching your projects…
+    </div>
+  </div>
+
+  <div class="footer" id="footer"></div>
+</div>
+
+<script>
+  const HORIZONS = {
+    now:     ['now'],
+    next:    ['next'],
+    soon:    ['soon'],
+    someday: ['someday']
+  };
+
+  const LANES = [
+    { key: 'now',     label: 'Now',     dot: 'd-now' },
+    { key: 'next',    label: 'Next',    dot: 'd-next' },
+    { key: 'soon',    label: 'Soon',    dot: 'd-soon' },
+    { key: 'someday', label: 'Someday', dot: 'd-someday' },
+  ];
+
+  function classify(project) {
+    const labels = (project.labels || []).map(l => l.toLowerCase());
+    for (const [horizon, keywords] of Object.entries(HORIZONS)) {
+      for (const kw of keywords) {
+        if (labels.some(l => l.includes(kw))) return horizon;
+      }
+    }
+    return null;
+  }
+
+  function badgeClass(status) {
+    const t = (status?.type || '').toLowerCase();
+    if (t === 'started') return 'b-inprogress';
+    if (t === 'planned') return 'b-planned';
+    return 'b-backlog';
+  }
+
+  function esc(s) {
+    return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function render(projects) {
+    const lanes = { now: [], next: [], soon: [], someday: [] };
+    const unassigned = [];
+
+    for (const p of projects) {
+      const h = classify(p);
+      if (h) lanes[h].push(p);
+      else unassigned.push(p);
+    }
+
+    const total = projects.length;
+    document.getElementById('subtitle').textContent =
+      `Product Management · ${total} active project${total !== 1 ? 's' : ''}`;
+
+    let html = '<div class="lanes">';
+    for (const { key, label, dot } of LANES) {
+      const items = lanes[key];
+      html += `<div class="lane">
+        <div class="lane-header">
+          <span class="dot ${dot}"></span>
+          <span class="lane-title">${label}</span>
+          <span class="lane-count">${items.length}</span>
+        </div>
+        <div class="lane-body">`;
+      if (!items.length) {
+        html += `<p class="empty">No projects</p>`;
+      } else {
+        for (const p of items) {
+          const sn = p.status?.name || '';
+          const bc = badgeClass(p.status);
+          html += `<a class="card" href="${esc(p.url)}" target="_blank">
+            <div class="card-name">${esc(p.name)}</div>
+            ${sn ? `<span class="badge ${bc}">${esc(sn)}</span>` : ''}
+          </a>`;
+        }
+      }
+      html += '</div></div>';
+    }
+    html += '</div>';
+
+    if (unassigned.length) {
+      html += `<div class="unassigned">
+        <div class="unassigned-title">No horizon label (${unassigned.length})</div>
+        <div class="unassigned-chips">`;
+      for (const p of unassigned) {
+        html += `<a class="chip" href="${esc(p.url)}" target="_blank">${esc(p.name)}</a>`;
+      }
+      html += '</div></div>';
+    }
+
+    document.getElementById('root').innerHTML = html;
+    document.getElementById('footer').textContent =
+      'Last updated ' + new Date().toLocaleString();
+  }
+
+  async function loadRoadmap() {
+    document.getElementById('root').innerHTML =
+      '<div class="loading"><div class="spinner"></div>Fetching projects…</div>';
+    try {
+      const res = await fetch('/api/projects');
+      if (!res.ok) throw new Error(`Server error: ${res.status}`);
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      render(data.projects);
+    } catch (err) {
+      document.getElementById('root').innerHTML =
+        `<div class="error"><strong>Could not load projects.</strong> ${esc(err.message)}</div>`;
+      document.getElementById('subtitle').textContent = 'Error loading data';
+    }
+  }
+
+  loadRoadmap();
+</script>
+</body>
+</html>
