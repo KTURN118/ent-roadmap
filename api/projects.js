@@ -34,7 +34,7 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': apiKey
+        'Authorization': `Bearer ${apiKey}`
       },
       body: JSON.stringify({ query })
     });
