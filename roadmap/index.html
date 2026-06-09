@@ -219,10 +219,87 @@
       color: #bbb;
       text-align: right;
     }
+
+    .gate {
+      position: fixed;
+      inset: 0;
+      background: #f7f7f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .gate-box {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 14px;
+      padding: 2rem 2.5rem;
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+    }
+
+    .gate-logo {
+      font-size: 15px;
+      font-weight: 500;
+      color: #1a1a1a;
+      margin-bottom: 4px;
+    }
+
+    .gate-sub {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 1.5rem;
+    }
+
+    .gate-input {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid rgba(0,0,0,0.15);
+      border-radius: 8px;
+      font-size: 14px;
+      margin-bottom: 10px;
+      outline: none;
+      background: #fff;
+      color: #1a1a1a;
+    }
+
+    .gate-input:focus { border-color: rgba(0,0,0,0.35); }
+
+    .gate-btn {
+      width: 100%;
+      padding: 9px;
+      background: #1a1a1a;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .gate-btn:hover { background: #333; }
+
+    .gate-error {
+      font-size: 12px;
+      color: #c00;
+      margin-top: 8px;
+      min-height: 16px;
+    }
   </style>
 </head>
 <body>
-<div class="page">
+<div class="gate" id="gate">
+  <div class="gate-box">
+    <div class="gate-logo">Entelligence</div>
+    <div class="gate-sub">PM Roadmap · Enter password to continue</div>
+    <input class="gate-input" type="password" id="gate-pw" placeholder="Password" onkeydown="if(event.key==='Enter')checkPassword()" autofocus />
+    <button class="gate-btn" onclick="checkPassword()">Continue</button>
+    <div class="gate-error" id="gate-error"></div>
+  </div>
+</div>
+
+<div class="page" id="main-page" style="display:none">
   <div class="header">
     <div class="header-left">
       <h1>PM Roadmap</h1>
@@ -244,6 +321,21 @@
 </div>
 
 <script>
+  const PASSWORD = 'entelligence2026';
+
+  function checkPassword() {
+    const val = document.getElementById('gate-pw').value;
+    if (val === PASSWORD) {
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('main-page').style.display = 'block';
+      loadRoadmap();
+    } else {
+      document.getElementById('gate-error').textContent = 'Incorrect password. Try again.';
+      document.getElementById('gate-pw').value = '';
+      document.getElementById('gate-pw').focus();
+    }
+  }
+
   const HORIZONS = {
     now:     ['now'],
     next:    ['next'],
@@ -350,7 +442,6 @@
     }
   }
 
-  loadRoadmap();
 </script>
 </body>
 </html>
