@@ -4,29 +4,58 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Entelligence PM Roadmap</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #f7f7f5;
-      color: #1a1a1a;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #F0F3FF;
+      color: #111827;
       min-height: 100vh;
-      padding: 2rem;
+      padding: 2rem 2.5rem;
     }
 
-    .page { max-width: 1100px; margin: 0 auto; }
+    .page { max-width: 1200px; margin: 0 auto; }
 
+    /* Header */
     .header {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       justify-content: space-between;
       margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid rgba(64, 68, 162, 0.15);
     }
 
-    .header-left h1 { font-size: 22px; font-weight: 500; }
-    .header-left p { font-size: 13px; color: #888; margin-top: 3px; }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #9233EA, #4044A2, #2563EB, #00AEEE);
+      flex-shrink: 0;
+    }
+
+    .header-titles h1 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #293475;
+      letter-spacing: -0.02em;
+    }
+
+    .header-titles p {
+      font-size: 13px;
+      color: #6B7280;
+      margin-top: 1px;
+      font-weight: 400;
+    }
 
     .header-right {
       display: flex;
@@ -37,122 +66,153 @@
     .user-pill {
       display: flex;
       align-items: center;
-      gap: 7px;
-      font-size: 12px;
-      color: #666;
+      gap: 8px;
+      font-size: 13px;
+      color: #374151;
       background: #fff;
-      border: 1px solid rgba(0,0,0,0.1);
+      border: 1px solid rgba(64, 68, 162, 0.2);
       border-radius: 999px;
-      padding: 4px 10px 4px 4px;
+      padding: 5px 12px 5px 5px;
+      font-weight: 400;
     }
 
     .user-avatar {
-      width: 22px;
-      height: 22px;
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
       object-fit: cover;
     }
 
     .user-avatar-placeholder {
-      width: 22px;
-      height: 22px;
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
-      background: #ddd;
+      background: linear-gradient(135deg, #4044A2, #2563EB);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 10px;
-      color: #888;
+      font-size: 11px;
+      color: #fff;
+      font-weight: 600;
     }
 
     .signout-btn {
       background: none;
       border: none;
-      font-size: 11px;
-      color: #aaa;
+      font-size: 12px;
+      color: #9CA3AF;
       cursor: pointer;
-      padding: 0;
+      font-family: 'Inter', sans-serif;
+      margin-left: 2px;
     }
-    .signout-btn:hover { color: #555; }
+    .signout-btn:hover { color: #4044A2; }
 
     .refresh-btn {
       background: #fff;
-      border: 1px solid rgba(0,0,0,0.15);
+      border: 1px solid rgba(64, 68, 162, 0.2);
       border-radius: 8px;
-      padding: 7px 14px;
+      padding: 8px 16px;
       font-size: 13px;
+      font-weight: 500;
       cursor: pointer;
-      color: #555;
+      color: #293475;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.15s;
     }
-    .refresh-btn:hover { background: #f0f0ee; }
+    .refresh-btn:hover {
+      background: #F0F3FF;
+      border-color: #4044A2;
+    }
 
+    /* Lanes */
     .lanes {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
+      gap: 14px;
     }
 
-    @media (max-width: 700px) {
+    @media (max-width: 800px) {
       .lanes { grid-template-columns: 1fr 1fr; }
       body { padding: 1rem; }
     }
 
     .lane {
       background: #fff;
-      border: 1px solid rgba(0,0,0,0.1);
-      border-radius: 12px;
+      border: 1px solid rgba(64, 68, 162, 0.12);
+      border-radius: 14px;
       overflow: hidden;
+      box-shadow: 0 1px 4px rgba(41, 52, 117, 0.06);
     }
 
     .lane-header {
-      padding: 10px 14px;
-      border-bottom: 1px solid rgba(0,0,0,0.08);
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(64, 68, 162, 0.08);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 9px;
+      background: #FAFBFF;
     }
 
-    .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
     .d-now     { background: #22C55E; }
     .d-next    { background: #EF9F27; }
-    .d-soon    { background: #378ADD; }
-    .d-someday { background: #888780; }
+    .d-soon    { background: #2563EB; }
+    .d-someday { background: #9CA3AF; }
 
-    .lane-title { font-size: 13px; font-weight: 500; }
+    .lane-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #111827;
+      letter-spacing: -0.01em;
+    }
+
     .lane-count {
       margin-left: auto;
       font-size: 11px;
-      color: #888;
-      background: #f5f5f3;
+      font-weight: 500;
+      color: #6B7280;
+      background: #F0F3FF;
       border-radius: 999px;
-      padding: 1px 8px;
+      padding: 2px 9px;
     }
 
     .lane-body {
-      padding: 8px;
+      padding: 10px;
       display: flex;
       flex-direction: column;
-      gap: 5px;
-      min-height: 60px;
+      gap: 7px;
+      min-height: 80px;
     }
 
+    /* Cards */
     .card {
-      border: 1px solid rgba(0,0,0,0.08);
-      border-radius: 8px;
-      padding: 8px 10px;
+      border: 1px solid rgba(64, 68, 162, 0.1);
+      border-radius: 10px;
+      padding: 11px 13px;
       display: block;
       color: inherit;
       cursor: pointer;
       background: #fff;
+      transition: all 0.15s;
     }
-    .card:hover { background: #f7f7f5; }
+    .card:hover {
+      border-color: #4044A2;
+      box-shadow: 0 2px 8px rgba(64, 68, 162, 0.12);
+      transform: translateY(-1px);
+    }
 
-    .card-name { font-size: 12px; font-weight: 500; line-height: 1.4; }
-    .card-desc {
-      font-size: 11px;
-      color: #888;
-      margin-top: 3px;
+    .card-name {
+      font-size: 13px;
+      font-weight: 500;
       line-height: 1.4;
+      color: #111827;
+    }
+
+    .card-desc {
+      font-size: 12px;
+      color: #6B7280;
+      margin-top: 4px;
+      line-height: 1.45;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -160,42 +220,65 @@
 
     .badge {
       display: inline-block;
-      font-size: 10px;
-      padding: 1px 7px;
-      border-radius: 4px;
-      margin-top: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 5px;
+      margin-top: 6px;
     }
-    .b-inprogress { background: #E6F1FB; color: #0C447C; }
-    .b-planned    { background: #FAEEDA; color: #633806; }
-    .b-backlog    { background: #f0f0ee; color: #666; }
+    .b-inprogress { background: #EFF6FF; color: #1D4ED8; }
+    .b-planned    { background: #FFFBEB; color: #92400E; }
+    .b-backlog    { background: #F9FAFB; color: #6B7280; border: 1px solid #E5E7EB; }
 
-    .empty { font-size: 11px; color: #bbb; text-align: center; padding: 12px 4px; }
+    .empty {
+      font-size: 12px;
+      color: #D1D5DB;
+      text-align: center;
+      padding: 16px 4px;
+    }
 
+    /* Unassigned */
     .unassigned {
       margin-top: 1.5rem;
       background: #fff;
-      border: 1px solid rgba(0,0,0,0.1);
-      border-radius: 12px;
-      padding: 12px 16px;
+      border: 1px solid rgba(64, 68, 162, 0.12);
+      border-radius: 14px;
+      padding: 14px 18px;
+      box-shadow: 0 1px 4px rgba(41, 52, 117, 0.06);
     }
-    .unassigned-title { font-size: 12px; font-weight: 500; color: #888; margin-bottom: 8px; }
+    .unassigned-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #9CA3AF;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
     .unassigned-chips { display: flex; flex-wrap: wrap; gap: 6px; }
     .chip {
-      border: 1px dashed rgba(0,0,0,0.2);
+      border: 1px solid rgba(64, 68, 162, 0.2);
       border-radius: 6px;
-      padding: 3px 10px;
-      font-size: 11px;
-      color: #888;
+      padding: 4px 11px;
+      font-size: 12px;
+      font-weight: 400;
+      color: #4B5563;
       cursor: pointer;
-      background: none;
+      background: #FAFBFF;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.15s;
     }
-    .chip:hover { background: #f5f5f3; color: #444; }
+    .chip:hover {
+      background: #F0F3FF;
+      border-color: #4044A2;
+      color: #293475;
+    }
 
-    .loading { text-align: center; padding: 4rem 2rem; color: #888; font-size: 14px; }
+    /* Loading / Error */
+    .loading { text-align: center; padding: 4rem 2rem; color: #9CA3AF; font-size: 14px; }
     .spinner {
-      width: 24px; height: 24px;
-      border: 2px solid #e0e0e0;
-      border-top-color: #888;
+      width: 28px; height: 28px;
+      border: 2px solid #E5E7EB;
+      border-top-color: #4044A2;
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
       margin: 0 auto 16px;
@@ -203,41 +286,55 @@
     @keyframes spin { to { transform: rotate(360deg); } }
 
     .error {
-      background: #fff0f0;
-      border: 1px solid rgba(200,0,0,0.15);
-      border-radius: 8px;
+      background: #FEF2F2;
+      border: 1px solid #FECACA;
+      border-radius: 10px;
       padding: 1rem;
       font-size: 13px;
-      color: #a00;
+      color: #DC2626;
     }
 
-    .footer { margin-top: 1.5rem; font-size: 11px; color: #bbb; text-align: right; }
+    .footer {
+      margin-top: 1.5rem;
+      font-size: 11px;
+      color: #D1D5DB;
+      text-align: right;
+    }
 
-    /* --- Gate --- */
+    /* Gate */
     .gate {
       position: fixed; inset: 0;
-      background: #f7f7f5;
+      background: #F0F3FF;
       display: flex; align-items: center; justify-content: center;
       z-index: 200;
     }
     .gate-box {
       background: #fff;
-      border: 1px solid rgba(0,0,0,0.1);
-      border-radius: 16px;
+      border: 1px solid rgba(64, 68, 162, 0.15);
+      border-radius: 18px;
       padding: 2.5rem;
-      width: 100%; max-width: 380px;
+      width: 100%; max-width: 400px;
       text-align: center;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      box-shadow: 0 8px 32px rgba(41, 52, 117, 0.12);
+    }
+    .gate-brandmark {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #9233EA, #4044A2, #2563EB, #00AEEE);
+      margin: 0 auto 16px;
     }
     .gate-logo {
-      font-size: 16px;
-      font-weight: 500;
-      margin-bottom: 4px;
+      font-size: 20px;
+      font-weight: 700;
+      color: #293475;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
     }
     .gate-sub {
       font-size: 13px;
-      color: #888;
+      color: #6B7280;
       margin-bottom: 2rem;
+      line-height: 1.5;
     }
     .gate-google {
       display: flex;
@@ -246,15 +343,15 @@
     }
     .gate-error {
       font-size: 12px;
-      color: #c00;
+      color: #DC2626;
       margin-top: 1rem;
       min-height: 16px;
     }
 
-    /* --- Modal --- */
+    /* Modal */
     .modal-overlay {
       position: fixed; inset: 0;
-      background: rgba(0,0,0,0.4);
+      background: rgba(17, 24, 39, 0.5);
       display: flex; align-items: center; justify-content: center;
       z-index: 100;
       padding: 1rem;
@@ -268,125 +365,156 @@
     }
     .modal {
       background: #fff;
-      border-radius: 16px;
+      border-radius: 18px;
       width: 100%;
-      max-width: 560px;
-      max-height: 85vh;
+      max-width: 580px;
+      max-height: 88vh;
       overflow-y: auto;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.18);
-      transform: translateY(12px);
+      box-shadow: 0 16px 48px rgba(17, 24, 39, 0.2);
+      transform: translateY(16px);
       transition: transform 0.15s ease;
     }
     .modal-overlay.open .modal { transform: translateY(0); }
 
     .modal-header {
-      padding: 1.25rem 1.5rem 1rem;
-      border-bottom: 1px solid rgba(0,0,0,0.08);
+      padding: 1.5rem 1.75rem 1.25rem;
+      border-bottom: 1px solid #F3F4F6;
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
       gap: 1rem;
     }
-    .modal-title { font-size: 17px; font-weight: 500; line-height: 1.3; }
-    .modal-subtitle { font-size: 13px; color: #666; margin-top: 4px; line-height: 1.4; }
-    .modal-close {
-      background: none; border: none;
-      font-size: 20px; color: #aaa;
-      cursor: pointer; flex-shrink: 0;
-      line-height: 1; padding: 2px;
+    .modal-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #111827;
+      line-height: 1.3;
+      letter-spacing: -0.02em;
     }
-    .modal-close:hover { color: #555; }
-    .modal-body { padding: 1.25rem 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+    .modal-subtitle {
+      font-size: 13px;
+      color: #6B7280;
+      margin-top: 5px;
+      line-height: 1.5;
+    }
+    .modal-close {
+      background: #F9FAFB;
+      border: 1px solid #E5E7EB;
+      border-radius: 8px;
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; color: #9CA3AF;
+      cursor: pointer; flex-shrink: 0;
+    }
+    .modal-close:hover { background: #F3F4F6; color: #374151; }
+
+    .modal-body {
+      padding: 1.5rem 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
 
     .modal-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1rem;
+      gap: 1.25rem;
     }
 
     .modal-field label {
       font-size: 11px;
-      font-weight: 500;
-      color: #999;
+      font-weight: 600;
+      color: #9CA3AF;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.06em;
       display: block;
-      margin-bottom: 4px;
+      margin-bottom: 5px;
     }
-    .modal-field .value { font-size: 13px; color: #1a1a1a; }
-    .modal-field .value.muted { color: #aaa; }
+    .modal-field .value {
+      font-size: 14px;
+      color: #111827;
+      font-weight: 400;
+    }
+    .modal-field .value.muted { color: #D1D5DB; }
 
     .modal-labels { display: flex; flex-wrap: wrap; gap: 5px; }
     .modal-label {
       font-size: 11px;
-      padding: 2px 8px;
+      font-weight: 500;
+      padding: 3px 9px;
       border-radius: 999px;
-      background: #f0f0ee;
-      color: #555;
+      background: #F0F3FF;
+      color: #4044A2;
+      border: 1px solid rgba(64, 68, 162, 0.2);
     }
-    .modal-label.horizon-now     { background: #FDECEA; color: #9B2224; }
-    .modal-label.horizon-next    { background: #FEF3E2; color: #7A4A00; }
-    .modal-label.horizon-soon    { background: #E6F1FB; color: #0C447C; }
-    .modal-label.horizon-someday { background: #F0F0EE; color: #555; }
+    .modal-label.horizon-now     { background: #F0FDF4; color: #15803D; border-color: rgba(21,128,61,0.2); }
+    .modal-label.horizon-next    { background: #FFFBEB; color: #92400E; border-color: rgba(146,64,14,0.2); }
+    .modal-label.horizon-soon    { background: #EFF6FF; color: #1D4ED8; border-color: rgba(29,78,216,0.2); }
+    .modal-label.horizon-someday { background: #F9FAFB; color: #6B7280; border-color: #E5E7EB; }
 
     .priority-indicator {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 13px;
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 14px;
     }
     .priority-dot { width: 8px; height: 8px; border-radius: 50%; }
-    .p-urgent  { background: #E24B4A; }
-    .p-high    { background: #EF9F27; }
-    .p-medium  { background: #378ADD; }
-    .p-low     { background: #aaa; }
-    .p-none    { background: #ddd; }
+    .p-urgent  { background: #EF4444; }
+    .p-high    { background: #F97316; }
+    .p-medium  { background: #2563EB; }
+    .p-low     { background: #D1D5DB; }
+    .p-none    { background: #E5E7EB; }
 
     .modal-divider {
       border: none;
-      border-top: 1px solid rgba(0,0,0,0.07);
+      border-top: 1px solid #F3F4F6;
       margin: 0;
     }
 
-    .ask-section { display: flex; flex-direction: column; gap: 8px; }
+    .ask-section { display: flex; flex-direction: column; gap: 10px; }
     .ask-label {
       font-size: 11px;
-      font-weight: 500;
-      color: #999;
+      font-weight: 600;
+      color: #9CA3AF;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.06em;
     }
     .ask-textarea {
       width: 100%;
-      padding: 9px 12px;
-      border: 1px solid rgba(0,0,0,0.15);
-      border-radius: 8px;
+      padding: 10px 13px;
+      border: 1px solid #E5E7EB;
+      border-radius: 10px;
       font-size: 13px;
-      font-family: inherit;
+      font-family: 'Inter', sans-serif;
       resize: vertical;
-      min-height: 80px;
+      min-height: 88px;
       outline: none;
-      color: #1a1a1a;
-      background: #fff;
+      color: #111827;
+      background: #FAFAFA;
+      transition: border-color 0.15s;
     }
-    .ask-textarea:focus { border-color: rgba(0,0,0,0.35); }
+    .ask-textarea:focus { border-color: #4044A2; background: #fff; }
     .ask-footer { display: flex; align-items: center; justify-content: space-between; }
-    .ask-hint { font-size: 11px; color: #bbb; }
+    .ask-hint { font-size: 12px; color: #D1D5DB; }
     .ask-btn {
-      background: #1a1a1a;
+      background: linear-gradient(135deg, #4044A2, #2563EB);
       color: #fff;
       border: none;
       border-radius: 8px;
-      padding: 7px 16px;
+      padding: 8px 18px;
       font-size: 13px;
+      font-weight: 500;
       cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: opacity 0.15s;
     }
-    .ask-btn:hover { background: #333; }
-    .ask-btn:disabled { background: #ccc; cursor: default; }
+    .ask-btn:hover { opacity: 0.9; }
+    .ask-btn:disabled { opacity: 0.5; cursor: default; }
     .ask-success {
-      font-size: 12px;
-      color: #0F6E56;
-      background: #E1F5EE;
-      border-radius: 6px;
-      padding: 8px 12px;
+      font-size: 13px;
+      color: #15803D;
+      background: #F0FDF4;
+      border: 1px solid rgba(21,128,61,0.2);
+      border-radius: 8px;
+      padding: 9px 13px;
       display: none;
     }
   </style>
@@ -396,8 +524,9 @@
 <!-- Gate -->
 <div class="gate" id="gate">
   <div class="gate-box">
-    <div class="gate-logo">Entelligence</div>
-    <div class="gate-sub">PM Roadmap · Sign in with your Entelligence account</div>
+    <div class="gate-brandmark"></div>
+    <div class="gate-logo">entelligence</div>
+    <div class="gate-sub">PM Roadmap · Sign in with your<br>Entelligence Google account to continue</div>
     <div class="gate-google">
       <div id="g_id_onload"
         data-client_id="860793114777-o11febiilppngnh5k0pl23jvsvegs2nm.apps.googleusercontent.com"
@@ -421,12 +550,15 @@
 <div class="page" id="main-page" style="display:none">
   <div class="header">
     <div class="header-left">
-      <h1>PM Roadmap</h1>
-      <p id="subtitle">Loading projects from Linear…</p>
+      <div class="brand-mark"></div>
+      <div class="header-titles">
+        <h1>PM Roadmap</h1>
+        <p id="subtitle">Loading projects from Linear…</p>
+      </div>
     </div>
     <div class="header-right">
       <div class="user-pill" id="user-pill" style="display:none">
-        <span class="user-avatar-placeholder" id="user-avatar-placeholder">●</span>
+        <span class="user-avatar-placeholder" id="user-avatar-placeholder"></span>
         <img class="user-avatar" id="user-avatar" style="display:none" />
         <span id="user-name"></span>
         <button class="signout-btn" onclick="signOut()">Sign out</button>
@@ -434,7 +566,10 @@
       <button class="refresh-btn" onclick="loadRoadmap()">↻ Refresh</button>
     </div>
   </div>
-  <div id="root"><div class="loading"><div class="spinner"></div>Fetching your projects…</div></div>
+
+  <div id="root">
+    <div class="loading"><div class="spinner"></div>Fetching your projects…</div>
+  </div>
   <div class="footer" id="footer"></div>
 </div>
 
@@ -459,29 +594,27 @@
   function handleGoogleSignIn(response) {
     const payload = parseJwt(response.credential);
     const email = payload.email || '';
-
     if (!email.endsWith('@' + ALLOWED_DOMAIN)) {
       document.getElementById('gate-error').textContent =
         'Access restricted to @entelligence.com accounts.';
       return;
     }
-
     currentUser = {
       name: payload.given_name || payload.name || email.split('@')[0],
-      email: email,
-      picture: payload.picture || null
+      email,
+      picture: payload.picture || null,
+      initials: (payload.given_name || email)[0].toUpperCase()
     };
-
-    // Show user pill
     document.getElementById('user-name').textContent = currentUser.name;
+    const placeholder = document.getElementById('user-avatar-placeholder');
+    placeholder.textContent = currentUser.initials;
     if (currentUser.picture) {
       const img = document.getElementById('user-avatar');
       img.src = currentUser.picture;
       img.style.display = 'block';
-      document.getElementById('user-avatar-placeholder').style.display = 'none';
+      placeholder.style.display = 'none';
     }
     document.getElementById('user-pill').style.display = 'flex';
-
     document.getElementById('gate').style.display = 'none';
     document.getElementById('main-page').style.display = 'block';
     loadRoadmap();
@@ -498,8 +631,6 @@
     const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
     return JSON.parse(atob(base64));
   }
-
-  // --- Roadmap logic ---
 
   const HORIZONS = {
     now:     ['now'],
@@ -547,8 +678,9 @@
 
   function formatDate(d) {
     if (!d) return null;
-    const dt = new Date(d + 'T00:00:00');
-    return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return new Date(d + 'T00:00:00').toLocaleDateString('en-US', {
+      month: 'short', day: 'numeric', year: 'numeric'
+    });
   }
 
   function horizonLabelClass(name) {
@@ -586,13 +718,13 @@
       <div class="modal-row">
         <div class="modal-field">
           <label>Status</label>
-          <span class="badge ${statusBadge}" style="font-size:12px;padding:2px 10px">${esc(statusName)}</span>
+          <span class="badge ${statusBadge}" style="font-size:12px;padding:3px 10px">${esc(statusName)}</span>
         </div>
         <div class="modal-field">
           <label>Priority</label>
           <span class="priority-indicator">
             <span class="priority-dot ${pDot}"></span>
-            ${esc(pLabel)}
+            <span class="value">${esc(pLabel)}</span>
           </span>
         </div>
       </div>
@@ -650,19 +782,15 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          projectId,
-          projectName,
-          question,
+          projectId, projectName, question,
           askedBy: currentUser?.email || 'Unknown'
         })
       });
-
       if (!res.ok) throw new Error('Failed to send');
-
       const success = document.getElementById('ask-success-' + projectId);
       if (success) success.style.display = 'block';
       if (textarea) textarea.value = '';
-      if (btn) { btn.style.display = 'none'; }
+      if (btn) btn.style.display = 'none';
     } catch(err) {
       if (btn) { btn.disabled = false; btn.textContent = 'Send question'; }
       alert('Something went wrong. Please try again.');
@@ -724,7 +852,7 @@
 
     if (unassigned.length) {
       html += `<div class="unassigned">
-        <div class="unassigned-title">No horizon label (${unassigned.length})</div>
+        <div class="unassigned-title">No horizon label · ${unassigned.length}</div>
         <div class="unassigned-chips">`;
       for (const p of unassigned) {
         html += `<button class="chip" onclick="openModal('${esc(p.id)}')">${esc(p.name)}</button>`;
@@ -733,7 +861,8 @@
     }
 
     document.getElementById('root').innerHTML = html;
-    document.getElementById('footer').textContent = 'Last updated ' + new Date().toLocaleString();
+    document.getElementById('footer').textContent =
+      'Last updated ' + new Date().toLocaleString();
   }
 
   async function loadRoadmap() {
