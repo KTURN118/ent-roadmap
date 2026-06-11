@@ -13,7 +13,11 @@ export default async function handler(req, res) {
         nodes {
           id
           name
+          description
           url
+          startDate
+          targetDate
+          priority
           teams {
             nodes {
               name
@@ -24,6 +28,15 @@ export default async function handler(req, res) {
             type
           }
           labels {
+            nodes {
+              name
+            }
+          }
+          lead {
+            name
+            avatarUrl
+          }
+          members {
             nodes {
               name
             }
@@ -64,8 +77,17 @@ export default async function handler(req, res) {
       const type = (p.status?.type || '').toLowerCase();
       return type !== 'canceled' && type !== 'completed';
     }).map(p => ({
-      ...p,
-      labels: (p.labels?.nodes || []).map(l => l.name)
+      id: p.id,
+      name: p.name,
+      description: p.description || null,
+      url: p.url,
+      startDate: p.startDate || null,
+      targetDate: p.targetDate || null,
+      priority: p.priority,
+      status: p.status,
+      labels: (p.labels?.nodes || []).map(l => l.name),
+      lead: p.lead ? { name: p.lead.name, avatarUrl: p.lead.avatarUrl } : null,
+      members: (p.members?.nodes || []).map(m => m.name),
     }));
 
     return res.status(200).json({ projects: pmProjects });
