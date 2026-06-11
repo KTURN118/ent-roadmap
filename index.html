@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Entelligence PM Roadmap</title>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -26,6 +27,53 @@
 
     .header-left h1 { font-size: 22px; font-weight: 500; }
     .header-left p { font-size: 13px; color: #888; margin-top: 3px; }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .user-pill {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      color: #666;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 999px;
+      padding: 4px 10px 4px 4px;
+    }
+
+    .user-avatar {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .user-avatar-placeholder {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: #888;
+    }
+
+    .signout-btn {
+      background: none;
+      border: none;
+      font-size: 11px;
+      color: #aaa;
+      cursor: pointer;
+      padding: 0;
+    }
+    .signout-btn:hover { color: #555; }
 
     .refresh-btn {
       background: #fff;
@@ -100,7 +148,15 @@
     .card:hover { background: #f7f7f5; }
 
     .card-name { font-size: 12px; font-weight: 500; line-height: 1.4; }
-    .card-desc { font-size: 11px; color: #888; margin-top: 3px; line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .card-desc {
+      font-size: 11px;
+      color: #888;
+      margin-top: 3px;
+      line-height: 1.4;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
     .badge {
       display: inline-block;
@@ -167,28 +223,33 @@
     .gate-box {
       background: #fff;
       border: 1px solid rgba(0,0,0,0.1);
-      border-radius: 14px;
-      padding: 2rem 2.5rem;
-      width: 100%; max-width: 360px;
+      border-radius: 16px;
+      padding: 2.5rem;
+      width: 100%; max-width: 380px;
       text-align: center;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
     }
-    .gate-logo { font-size: 15px; font-weight: 500; margin-bottom: 4px; }
-    .gate-sub { font-size: 13px; color: #888; margin-bottom: 1.5rem; }
-    .gate-input {
-      width: 100%; padding: 9px 12px;
-      border: 1px solid rgba(0,0,0,0.15);
-      border-radius: 8px; font-size: 14px;
-      margin-bottom: 10px; outline: none;
+    .gate-logo {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 4px;
     }
-    .gate-input:focus { border-color: rgba(0,0,0,0.35); }
-    .gate-btn {
-      width: 100%; padding: 9px;
-      background: #1a1a1a; color: #fff;
-      border: none; border-radius: 8px;
-      font-size: 14px; cursor: pointer;
+    .gate-sub {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 2rem;
     }
-    .gate-btn:hover { background: #333; }
-    .gate-error { font-size: 12px; color: #c00; margin-top: 8px; min-height: 16px; }
+    .gate-google {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .gate-error {
+      font-size: 12px;
+      color: #c00;
+      margin-top: 1rem;
+      min-height: 16px;
+    }
 
     /* --- Modal --- */
     .modal-overlay {
@@ -216,9 +277,8 @@
       transform: translateY(12px);
       transition: transform 0.15s ease;
     }
-    .modal-overlay.open .modal {
-      transform: translateY(0);
-    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+
     .modal-header {
       padding: 1.25rem 1.5rem 1rem;
       border-bottom: 1px solid rgba(0,0,0,0.08);
@@ -253,10 +313,7 @@
       display: block;
       margin-bottom: 4px;
     }
-    .modal-field .value {
-      font-size: 13px;
-      color: #1a1a1a;
-    }
+    .modal-field .value { font-size: 13px; color: #1a1a1a; }
     .modal-field .value.muted { color: #aaa; }
 
     .modal-labels { display: flex; flex-wrap: wrap; gap: 5px; }
@@ -276,14 +333,62 @@
       display: inline-flex; align-items: center; gap: 5px;
       font-size: 13px;
     }
-    .priority-dot {
-      width: 8px; height: 8px; border-radius: 50%;
-    }
+    .priority-dot { width: 8px; height: 8px; border-radius: 50%; }
     .p-urgent  { background: #E24B4A; }
     .p-high    { background: #EF9F27; }
     .p-medium  { background: #378ADD; }
     .p-low     { background: #aaa; }
     .p-none    { background: #ddd; }
+
+    .modal-divider {
+      border: none;
+      border-top: 1px solid rgba(0,0,0,0.07);
+      margin: 0;
+    }
+
+    .ask-section { display: flex; flex-direction: column; gap: 8px; }
+    .ask-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .ask-textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid rgba(0,0,0,0.15);
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 80px;
+      outline: none;
+      color: #1a1a1a;
+      background: #fff;
+    }
+    .ask-textarea:focus { border-color: rgba(0,0,0,0.35); }
+    .ask-footer { display: flex; align-items: center; justify-content: space-between; }
+    .ask-hint { font-size: 11px; color: #bbb; }
+    .ask-btn {
+      background: #1a1a1a;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 7px 16px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .ask-btn:hover { background: #333; }
+    .ask-btn:disabled { background: #ccc; cursor: default; }
+    .ask-success {
+      font-size: 12px;
+      color: #0F6E56;
+      background: #E1F5EE;
+      border-radius: 6px;
+      padding: 8px 12px;
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -292,10 +397,22 @@
 <div class="gate" id="gate">
   <div class="gate-box">
     <div class="gate-logo">Entelligence</div>
-    <div class="gate-sub">PM Roadmap · Enter password to continue</div>
-    <input class="gate-input" type="password" id="gate-pw" placeholder="Password"
-      onkeydown="if(event.key==='Enter')checkPassword()" autofocus />
-    <button class="gate-btn" onclick="checkPassword()">Continue</button>
+    <div class="gate-sub">PM Roadmap · Sign in with your Entelligence account</div>
+    <div class="gate-google">
+      <div id="g_id_onload"
+        data-client_id="860793114777-o11febiilppngnh5k0pl23jvsvegs2nm.apps.googleusercontent.com"
+        data-callback="handleGoogleSignIn"
+        data-auto_prompt="false">
+      </div>
+      <div class="g_id_signin"
+        data-type="standard"
+        data-size="large"
+        data-theme="outline"
+        data-text="sign_in_with"
+        data-shape="rectangular"
+        data-logo_alignment="left">
+      </div>
+    </div>
     <div class="gate-error" id="gate-error"></div>
   </div>
 </div>
@@ -307,7 +424,15 @@
       <h1>PM Roadmap</h1>
       <p id="subtitle">Loading projects from Linear…</p>
     </div>
-    <button class="refresh-btn" onclick="loadRoadmap()">↻ Refresh</button>
+    <div class="header-right">
+      <div class="user-pill" id="user-pill" style="display:none">
+        <span class="user-avatar-placeholder" id="user-avatar-placeholder">●</span>
+        <img class="user-avatar" id="user-avatar" style="display:none" />
+        <span id="user-name"></span>
+        <button class="signout-btn" onclick="signOut()">Sign out</button>
+      </div>
+      <button class="refresh-btn" onclick="loadRoadmap()">↻ Refresh</button>
+    </div>
   </div>
   <div id="root"><div class="loading"><div class="spinner"></div>Fetching your projects…</div></div>
   <div class="footer" id="footer"></div>
@@ -328,20 +453,53 @@
 </div>
 
 <script>
-  const PASSWORD = 'entelligence2026';
+  const ALLOWED_DOMAIN = 'entelligence.com';
+  let currentUser = null;
 
-  function checkPassword() {
-    const val = document.getElementById('gate-pw').value;
-    if (val === PASSWORD) {
-      document.getElementById('gate').style.display = 'none';
-      document.getElementById('main-page').style.display = 'block';
-      loadRoadmap();
-    } else {
-      document.getElementById('gate-error').textContent = 'Incorrect password. Try again.';
-      document.getElementById('gate-pw').value = '';
-      document.getElementById('gate-pw').focus();
+  function handleGoogleSignIn(response) {
+    const payload = parseJwt(response.credential);
+    const email = payload.email || '';
+
+    if (!email.endsWith('@' + ALLOWED_DOMAIN)) {
+      document.getElementById('gate-error').textContent =
+        'Access restricted to @entelligence.com accounts.';
+      return;
     }
+
+    currentUser = {
+      name: payload.given_name || payload.name || email.split('@')[0],
+      email: email,
+      picture: payload.picture || null
+    };
+
+    // Show user pill
+    document.getElementById('user-name').textContent = currentUser.name;
+    if (currentUser.picture) {
+      const img = document.getElementById('user-avatar');
+      img.src = currentUser.picture;
+      img.style.display = 'block';
+      document.getElementById('user-avatar-placeholder').style.display = 'none';
+    }
+    document.getElementById('user-pill').style.display = 'flex';
+
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('main-page').style.display = 'block';
+    loadRoadmap();
   }
+
+  function signOut() {
+    currentUser = null;
+    document.getElementById('gate').style.display = 'flex';
+    document.getElementById('main-page').style.display = 'none';
+    document.getElementById('gate-error').textContent = '';
+  }
+
+  function parseJwt(token) {
+    const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+    return JSON.parse(atob(base64));
+  }
+
+  // --- Roadmap logic ---
 
   const HORIZONS = {
     now:     ['now'],
@@ -377,7 +535,13 @@
   }
 
   function priorityLabel(p) {
-    const map = { 0: ['No priority','p-none'], 1: ['Urgent','p-urgent'], 2: ['High','p-high'], 3: ['Medium','p-medium'], 4: ['Low','p-low'] };
+    const map = {
+      0: ['No priority', 'p-none'],
+      1: ['Urgent', 'p-urgent'],
+      2: ['High', 'p-high'],
+      3: ['Medium', 'p-medium'],
+      4: ['Low', 'p-low']
+    };
     return map[p] || map[0];
   }
 
@@ -452,10 +616,57 @@
           <div class="value ${targetDate ? '' : 'muted'}">${targetDate || 'Not set'}</div>
         </div>
       </div>
+      <hr class="modal-divider" />
+      <div class="ask-section">
+        <div class="ask-label">Ask a question about this project</div>
+        <textarea class="ask-textarea" id="ask-input-${esc(p.id)}"
+          placeholder="What would you like to know?"></textarea>
+        <div class="ask-footer">
+          <span class="ask-hint">Sent to the PM team</span>
+          <button class="ask-btn" onclick="submitAsk('${esc(p.id)}', '${esc(p.name)}')">
+            Send question
+          </button>
+        </div>
+        <div class="ask-success" id="ask-success-${esc(p.id)}">
+          ✓ Your question has been sent to the PM team.
+        </div>
+      </div>
     `;
 
     document.getElementById('modal-overlay').classList.add('open');
     document.body.style.overflow = 'hidden';
+  }
+
+  async function submitAsk(projectId, projectName) {
+    const textarea = document.getElementById('ask-input-' + projectId);
+    const question = (textarea?.value || '').trim();
+    if (!question) return;
+
+    const btn = document.querySelector(`button[onclick="submitAsk('${projectId}', '${projectName}')"]`);
+    if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+
+    try {
+      const res = await fetch('/api/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          projectId,
+          projectName,
+          question,
+          askedBy: currentUser?.email || 'Unknown'
+        })
+      });
+
+      if (!res.ok) throw new Error('Failed to send');
+
+      const success = document.getElementById('ask-success-' + projectId);
+      if (success) success.style.display = 'block';
+      if (textarea) textarea.value = '';
+      if (btn) { btn.style.display = 'none'; }
+    } catch(err) {
+      if (btn) { btn.disabled = false; btn.textContent = 'Send question'; }
+      alert('Something went wrong. Please try again.');
+    }
   }
 
   function closeModal() {
