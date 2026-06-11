@@ -35,8 +35,6 @@ export default async function handler(req, res) {
           members {
             nodes { name }
           }
-          completedIssueCountByType
-          issueCountByType
         }
       }
     }
@@ -69,29 +67,22 @@ export default async function handler(req, res) {
         const type = (p.status?.type || '').toLowerCase();
         return type !== 'canceled' && type !== 'completed';
       })
-      .map(p => {
-        const countByType = p.issueCountByType || {};
-        const completedByType = p.completedIssueCountByType || {};
-        const totalIssues = Object.values(countByType).reduce((a, b) => a + (b || 0), 0);
-        const completedIssues = Object.values(completedByType).reduce((a, b) => a + (b || 0), 0);
-
-        return {
-          id: p.id,
-          name: p.name,
-          description: p.description || null,
-          url: p.url,
-          startDate: p.startDate || null,
-          targetDate: p.targetDate || null,
-          updatedAt: p.updatedAt || null,
-          priority: p.priority,
-          status: p.status,
-          labels: (p.labels?.nodes || []).map(l => l.name),
-          lead: p.lead ? { name: p.lead.name } : null,
-          members: (p.members?.nodes || []).map(m => m.name),
-          issueCount: totalIssues,
-          completedIssueCount: completedIssues,
-        };
-      });
+      .map(p => ({
+        id: p.id,
+        name: p.name,
+        description: p.description || null,
+        url: p.url,
+        startDate: p.startDate || null,
+        targetDate: p.targetDate || null,
+        updatedAt: p.updatedAt || null,
+        priority: p.priority,
+        status: p.status,
+        labels: (p.labels?.nodes || []).map(l => l.name),
+        lead: p.lead ? { name: p.lead.name } : null,
+        members: (p.members?.nodes || []).map(m => m.name),
+        issueCount: 0,
+        completedIssueCount: 0,
+      }));
 
     return res.status(200).json({ projects: pmProjects });
   } catch (err) {
