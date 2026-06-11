@@ -50,5 +50,6 @@ export default async function handler(req, res) {
         headers: { 'Content-Type': 'application/json', 'Authorization': apiKey },
         body: JSON.stringify({ query: projectsQuery })
       }),
+      }
       fetch('https://api.linear.app/graphql', {
         method: 'POST',
