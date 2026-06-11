@@ -17,28 +17,31 @@ export default async function handler(req, res) {
           url
           startDate
           targetDate
+          updatedAt
           priority
           teams {
-            nodes {
-              name
-            }
+            nodes { name }
           }
           status {
             name
             type
           }
           labels {
-            nodes {
-              name
-            }
+            nodes { name }
           }
           lead {
             name
             avatarUrl
           }
           members {
+            nodes { name }
+          }
+          issues {
             nodes {
-              name
+              id
+              state {
+                type
+              }
             }
           }
         }
@@ -58,11 +61,8 @@ export default async function handler(req, res) {
 
     const text = await response.text();
     let data;
-    try {
-      data = JSON.parse(text);
-    } catch(e) {
-      return res.status(500).json({ error: 'Invalid JSON from Linear', raw: text.slice(0, 300) });
-    }
+    try { data = JSON.parse(text); }
+    catch(e) { return res.status(500).json({ error: 'Invalid JSON from Linear', raw: text.slice(0, 300) }); }
 
     if (data.errors) {
       return res.status(500).json({ error: data.errors[0].message });
@@ -70,25 +70,40 @@ export default async function handler(req, res) {
 
     const allProjects = data.data?.projects?.nodes || [];
 
-    const pmProjects = allProjects.filter(p => {
-      const teams = p.teams?.nodes || [];
-      return teams.some(t => t.name === 'Product Management');
-    }).filter(p => {
-      const type = (p.status?.type || '').toLowerCase();
-      return type !== 'canceled' && type !== 'completed';
-    }).map(p => ({
-      id: p.id,
-      name: p.name,
-      description: p.description || null,
-      url: p.url,
-      startDate: p.startDate || null,
-      targetDate: p.targetDate || null,
-      priority: p.priority,
-      status: p.status,
-      labels: (p.labels?.nodes || []).map(l => l.name),
-      lead: p.lead ? { name: p.lead.name, avatarUrl: p.lead.avatarUrl } : null,
-      members: (p.members?.nodes || []).map(m => m.name),
-    }));
+    const pmProjects = allProjects
+      .filter(p => {
+        const teams = p.teams?.nodes || [];
+        return teams.some(t => t.name === 'Product Management');
+      })
+      .filter(p => {
+        const type = (p.status?.type || '').toLowerCase();
+        return type !== 'canceled' && type !== 'completed';
+      })
+      .map(p => {
+        const issues = p.issues?.nodes || [];
+        const totalIssues = issues.length;
+        const completedIssues = issues.filter(i => {
+          const t = (i.state?.type || '').toLowerCase();
+          return t === 'completed';
+        }).length;
+
+        return {
+          id: p.id,
+          name: p.name,
+          description: p.description || null,
+          url: p.url,
+          startDate: p.startDate || null,
+          targetDate: p.targetDate || null,
+          updatedAt: p.updatedAt || null,
+          priority: p.priority,
+          status: p.status,
+          labels: (p.labels?.nodes || []).map(l => l.name),
+          lead: p.lead ? { name: p.lead.name, avatarUrl: p.lead.avatarUrl } : null,
+          members: (p.members?.nodes || []).map(m => m.name),
+          issueCount: totalIssues,
+          completedIssueCount: completedIssues,
+        };
+      });
 
     return res.status(200).json({ projects: pmProjects });
   } catch (err) {
