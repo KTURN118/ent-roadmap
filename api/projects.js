@@ -31,19 +31,12 @@ export default async function handler(req, res) {
           }
           lead {
             name
-            avatarUrl
           }
           members {
             nodes { name }
           }
-          issues {
-            nodes {
-              id
-              state {
-                type
-              }
-            }
-          }
+          completedIssueCountByType
+          issueCountByType
         }
       }
     }
@@ -62,7 +55,7 @@ export default async function handler(req, res) {
     const text = await response.text();
     let data;
     try { data = JSON.parse(text); }
-    catch(e) { return res.status(500).json({ error: 'Invalid JSON from Linear', raw: text.slice(0, 300) }); }
+    catch(e) { return res.status(500).json({ error: 'Invalid JSON', raw: text.slice(0, 300) }); }
 
     if (data.errors) {
       return res.status(500).json({ error: data.errors[0].message });
@@ -71,21 +64,16 @@ export default async function handler(req, res) {
     const allProjects = data.data?.projects?.nodes || [];
 
     const pmProjects = allProjects
-      .filter(p => {
-        const teams = p.teams?.nodes || [];
-        return teams.some(t => t.name === 'Product Management');
-      })
+      .filter(p => (p.teams?.nodes || []).some(t => t.name === 'Product Management'))
       .filter(p => {
         const type = (p.status?.type || '').toLowerCase();
         return type !== 'canceled' && type !== 'completed';
       })
       .map(p => {
-        const issues = p.issues?.nodes || [];
-        const totalIssues = issues.length;
-        const completedIssues = issues.filter(i => {
-          const t = (i.state?.type || '').toLowerCase();
-          return t === 'completed';
-        }).length;
+        const countByType = p.issueCountByType || {};
+        const completedByType = p.completedIssueCountByType || {};
+        const totalIssues = Object.values(countByType).reduce((a, b) => a + (b || 0), 0);
+        const completedIssues = Object.values(completedByType).reduce((a, b) => a + (b || 0), 0);
 
         return {
           id: p.id,
@@ -98,7 +86,7 @@ export default async function handler(req, res) {
           priority: p.priority,
           status: p.status,
           labels: (p.labels?.nodes || []).map(l => l.name),
-          lead: p.lead ? { name: p.lead.name, avatarUrl: p.lead.avatarUrl } : null,
+          lead: p.lead ? { name: p.lead.name } : null,
           members: (p.members?.nodes || []).map(m => m.name),
           issueCount: totalIssues,
           completedIssueCount: completedIssues,
