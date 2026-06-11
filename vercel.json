@@ -2,6 +2,7 @@
   "version": 2,
   "routes": [
     { "src": "/api/projects", "dest": "/api/projects.js" },
+    { "src": "/api/ask", "dest": "/api/ask.js" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
