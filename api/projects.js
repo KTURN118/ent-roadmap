@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'LINEAR_API_KEY not configured' });
   }
 
-  const query = `
+  const projectsQuery = `
     query {
       projects(first: 50) {
         nodes {
@@ -19,73 +19,36 @@ export default async function handler(req, res) {
           targetDate
           updatedAt
           priority
-          teams {
-            nodes { name }
-          }
-          status {
-            name
-            type
-          }
-          labels {
-            nodes { name }
-          }
-          lead {
-            name
-          }
-          members {
-            nodes { name }
-          }
+          teams { nodes { name } }
+          status { name type }
+          labels { nodes { name } }
+          lead { name }
+          members { nodes { name } }
+        }
+      }
+    }
+  `;
+
+  const issuesQuery = `
+    query {
+      issues(
+        filter: { team: { name: { eq: "Product Management" } } }
+        first: 250
+      ) {
+        nodes {
+          project { id }
+          state { type }
         }
       }
     }
   `;
 
   try {
-    const response = await fetch('https://api.linear.app/graphql', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': apiKey
-      },
-      body: JSON.stringify({ query })
-    });
-
-    const text = await response.text();
-    let data;
-    try { data = JSON.parse(text); }
-    catch(e) { return res.status(500).json({ error: 'Invalid JSON', raw: text.slice(0, 300) }); }
-
-    if (data.errors) {
-      return res.status(500).json({ error: data.errors[0].message });
-    }
-
-    const allProjects = data.data?.projects?.nodes || [];
-
-    const pmProjects = allProjects
-      .filter(p => (p.teams?.nodes || []).some(t => t.name === 'Product Management'))
-      .filter(p => {
-        const type = (p.status?.type || '').toLowerCase();
-        return type !== 'canceled' && type !== 'completed';
-      })
-      .map(p => ({
-        id: p.id,
-        name: p.name,
-        description: p.description || null,
-        url: p.url,
-        startDate: p.startDate || null,
-        targetDate: p.targetDate || null,
-        updatedAt: p.updatedAt || null,
-        priority: p.priority,
-        status: p.status,
-        labels: (p.labels?.nodes || []).map(l => l.name),
-        lead: p.lead ? { name: p.lead.name } : null,
-        members: (p.members?.nodes || []).map(m => m.name),
-        issueCount: 0,
-        completedIssueCount: 0,
-      }));
-
-    return res.status(200).json({ projects: pmProjects });
-  } catch (err) {
-    return res.status(500).json({ error: err.message });
-  }
-}
+    const [projectsRes, issuesRes] = await Promise.all([
+      fetch('https://api.linear.app/graphql', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': apiKey },
+        body: JSON.stringify({ query: projectsQuery })
+      }),
+      fetch('https://api.linear.app/graphql', {
+        method: 'POST',
